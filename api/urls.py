@@ -19,4 +19,5 @@ urlpatterns = [
     path('payroll/<int:id>/update-status-release/', views.PayrollStatusReleaseUpdateView.as_view(), name='payroll-update-status-release'),
     
     path("payroll/staff/<int:staff_id>/", views.PayrollStaffStatusView.as_view(), name="payroll-staff-status"),
+    path('payroll-details/staff/<int:staff_id>/', views.PayrollByStaffView.as_view(), name='payroll-by-staff'),
 ]

@@ -23,6 +23,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        token['id'] = user.id  # ✅ include user id in token
         token['username'] = user.username
         token['email'] = user.email
         token['first_name'] = user.first_name
@@ -35,6 +36,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
 
         # add custom fields in response body
+        data['id'] = self.user.id  # ✅ include id in response
         data['username'] = self.user.username
         data['email'] = self.user.email
         data['first_name'] = self.user.first_name
@@ -167,3 +169,11 @@ class PayrollStaffStatusView(generics.ListAPIView):
     def get_queryset(self):
         staff_id = self.kwargs.get("staff_id")
         return Payroll.objects.filter(staff_id=staff_id).order_by("-date_prepared")
+
+
+class PayrollByStaffView(generics.ListAPIView):
+    serializer_class = PayrollSerializer
+
+    def get_queryset(self):
+        staff_id = self.kwargs['staff_id']
+        return Payroll.objects.filter(staff_id=staff_id)
