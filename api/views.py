@@ -1,13 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from rest_framework import status, generics
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.shortcuts import get_object_or_404
 from .models import Payroll
-from .serializers import PayrollSerializer, UserSerializer, PayrollStatusReleaseSerializer
+from .serializers import PayrollSerializer, UserSerializer, PayrollStatusReleaseSerializer, GovernmentSharesSerializer, GovernmentShares
 import qrcode
 from io import BytesIO
 from django.core.files.base import ContentFile
@@ -15,8 +15,9 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import Payroll, QrCode
 from .serializers import QrCodeSerializer
-
-
+from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.views import View
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     permission_classes = [AllowAny]
 
@@ -177,3 +178,52 @@ class PayrollByStaffView(generics.ListAPIView):
     def get_queryset(self):
         staff_id = self.kwargs['staff_id']
         return Payroll.objects.filter(staff_id=staff_id)
+    
+
+class QrCodeView(View):
+    def get(self, request, payroll_id):
+        qr_obj = get_object_or_404(QrCode, payroll_id=payroll_id)
+        if not qr_obj.qr:
+            raise Http404("QR Code not found")
+
+        response = HttpResponse(qr_obj.qr, content_type="image/png")
+        response['Content-Disposition'] = 'inline; filename="qr.png"'
+        return response
+    
+    
+class GovernmentSharesView(generics.GenericAPIView):
+    serializer_class = GovernmentSharesSerializer
+
+    def get_queryset(self):
+        payroll_id = self.kwargs['payroll_id']
+        return GovernmentShares.objects.filter(payroll_id=payroll_id)
+
+    def get(self, request, payroll_id):
+        shares = self.get_queryset().first()
+        if not shares:
+            return Response({'detail': 'Government shares not found.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(shares)
+        return Response(serializer.data)
+
+    def post(self, request, payroll_id):
+        try:
+            payroll = Payroll.objects.get(id=payroll_id)
+        except Payroll.DoesNotExist:
+            return Response({'detail': 'Payroll not found.'}, status=status.HTTP_404_NOT_FOUND)
+        data = request.data.copy()
+        data['payroll'] = payroll.id
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.save(payroll=payroll)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, payroll_id):
+        shares = self.get_queryset().first()
+        if not shares:
+            return Response({'detail': 'Government shares not found.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(shares, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

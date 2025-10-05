@@ -1,7 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Payroll, QrCode
+from .models import Payroll, QrCode, GovernmentShares
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -68,3 +68,9 @@ class PayrollStatusReleaseSerializer(serializers.ModelSerializer):
         model = Payroll
         fields = ['status', 'date_release']
         
+
+
+class GovernmentSharesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GovernmentShares
+        fields = ['id', 'payroll', 'sss', 'gsis']

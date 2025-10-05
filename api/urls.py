@@ -13,6 +13,7 @@ urlpatterns = [
     path("payrolls/", views.PayrollListView.as_view(), name="payroll-list"),
     path('payrolls/<int:pk>/', views.PayrollDetailView.as_view(), name='payroll-detail'),
     path('generate-qr/', views.QrCodeGenerateView.as_view(), name='generate-qr'),
+    path('qr/<int:payroll_id>/', views.QrCodeView.as_view(), name='qr-code'),
     
     path("payrolls/<int:id>/update/", views.PayrollOnlyUpdateView.as_view(), name="payroll-only-update"),
     path('payrolls/', views.PayrollListView.as_view(), name='payroll-list'),
@@ -20,4 +21,5 @@ urlpatterns = [
     
     path("payroll/staff/<int:staff_id>/", views.PayrollStaffStatusView.as_view(), name="payroll-staff-status"),
     path('payroll-details/staff/<int:staff_id>/', views.PayrollByStaffView.as_view(), name='payroll-by-staff'),
+    path('payroll/<int:payroll_id>/government-shares/', views.GovernmentSharesView.as_view(), name='government-shares'),
 ]

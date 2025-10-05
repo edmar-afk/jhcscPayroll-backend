@@ -24,7 +24,7 @@ class Payroll(models.Model):
 
 
 class GovernmentShares(models.Model):
-    staff = models.ForeignKey(User, on_delete=models.CASCADE)
+    payroll = models.ForeignKey(Payroll, on_delete=models.CASCADE)
     sss = models.TextField()
     gsis = models.TextField()
 
