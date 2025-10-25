@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://payroll_database_h8h2_user:nXjk52xT5C51X7o0X4pZwdKbm6AqX158@dpg-d3ubeh6uk2gs73do2ga0-a/payroll_database_h8h2'
+        default='postgresql://payroll_database_h8h2_user:nXjk52xT5C51X7o0X4pZwdKbm6AqX158@dpg-d3ubeh6uk2gs73do2ga0-a.oregon-postgres.render.com/payroll_database_h8h2'
     )
 }
 
