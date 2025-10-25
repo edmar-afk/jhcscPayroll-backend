@@ -38,3 +38,23 @@ class QrCode(models.Model):
         validators=[FileExtensionValidator(
             allowed_extensions=['jpg', 'jpeg', 'png'])]
     )
+
+
+class PayrollStatus(models.Model):
+    payroll = models.ForeignKey('Payroll', on_delete=models.CASCADE)
+
+    hr_status = models.TextField(blank=True, null=True)
+    hr_reason = models.TextField(blank=True, null=True)
+    hr_date_updated = models.TextField(blank=True, null=True)
+    
+    budget_status = models.TextField(blank=True, null=True)
+    budget_reason = models.TextField(blank=True, null=True)
+    budget_date_updated = models.TextField(blank=True, null=True)
+    
+    president_status = models.TextField(blank=True, null=True)
+    president_reason = models.TextField(blank=True, null=True)
+    president_date_updated = models.TextField(blank=True, null=True)
+    
+    cashier_status = models.TextField(blank=True, null=True)
+    cashier_reason = models.TextField(blank=True, null=True)
+    cashier_date_updated = models.TextField(blank=True, null=True)

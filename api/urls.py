@@ -22,4 +22,19 @@ urlpatterns = [
     path("payroll/staff/<int:staff_id>/", views.PayrollStaffStatusView.as_view(), name="payroll-staff-status"),
     path('payroll-details/staff/<int:staff_id>/', views.PayrollByStaffView.as_view(), name='payroll-by-staff'),
     path('payroll/<int:payroll_id>/government-shares/', views.GovernmentSharesView.as_view(), name='government-shares'),
+    
+    
+    path('payroll/<int:payroll_id>/update/hr/', views.UpdateHRStatusView.as_view(), name='update_hr_status'),
+    path('payroll/<int:payroll_id>/update/budget/', views.UpdateBudgetStatusView.as_view(), name='update_budget_status'),
+    path('payroll/<int:payroll_id>/update/president/', views.UpdatePresidentStatusView.as_view(), name='update_president_status'),
+    path('payroll/<int:payroll_id>/update/cashier/', views.UpdateCashierStatusView.as_view(), name='update_cashier_status'),
+    
+    path('payroll/<int:payroll_id>/status/', views.PayrollStatusDetailView.as_view()),
+    
+    
+    path('delete-payroll/<int:payroll_id>/', views.PayrollDeleteView.as_view(), name='delete-payroll'),
+    path('payroll/<int:payroll_id>/has_qr/', views.CheckQrCodeView.as_view(), name='check_qr_code'),
+    
+    path('send-payroll-sms/<int:payroll_id>/', views.PayrollStatusSmsSenderView.as_view(), name='send_payroll_sms'),
+
 ]
