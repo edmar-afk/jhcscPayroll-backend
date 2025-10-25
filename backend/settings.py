@@ -14,6 +14,7 @@ from pathlib import Path
 from pathlib import Path
 from datetime import timedelta
 import os
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,6 +29,7 @@ SECRET_KEY = 'django-insecure-n07q6x*4o2rh9-cj4r0bioai(@sm7zrqv0qfsp-)o_%l!$2$aa
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ["https://jhcscpayroll-backend-3.onrender.com"]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -90,11 +92,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://payroll_database_h8h2_user:nXjk52xT5C51X7o0X4pZwdKbm6AqX158@dpg-d3ubeh6uk2gs73do2ga0-a/payroll_database_h8h2'
+    )
 }
 
 
