@@ -92,18 +92,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://payroll_database_h8h2_user:nXjk52xT5C51X7o0X4pZwdKbm6AqX158@dpg-d3ubeh6uk2gs73do2ga0-a/payroll_database_h8h2'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgresql://payroll_database_h8h2_user:nXjk52xT5C51X7o0X4pZwdKbm6AqX158@dpg-d3ubeh6uk2gs73do2ga0-a/payroll_database_h8h2'
+#     )
+# }
 
 
 # Password validation
