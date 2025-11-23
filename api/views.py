@@ -22,7 +22,8 @@ from django.utils import timezone
 import pytz
 import requests, random, time
 from rest_framework import status, views
-
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 
 
 
@@ -224,7 +225,7 @@ class QrCodeGenerateView(generics.CreateAPIView):
             return Response({'error': 'Payroll not found'}, status=status.HTTP_404_NOT_FOUND)
 
         # Generate QR code (example: encode payroll_no & total_amount_due)
-        qr_data = f"Payroll ID: {payroll.id}, Payroll No: {payroll.payroll_no}, Amount Due: {payroll.total_amount_due}"
+        qr_data = f"Payroll ID: {payroll.id}"
         qr_img = qrcode.make(qr_data)
 
         buffer = BytesIO()
@@ -436,3 +437,43 @@ class CheckQrCodeView(APIView):
                 "has_qr": False,
                 "message": "No QR code found for this payroll."
             }, status=status.HTTP_200_OK)
+
+
+
+def download_payroll_pdf(request, pk):
+    payroll = Payroll.objects.get(pk=pk)
+    try:
+        status = PayrollStatus.objects.get(payroll=payroll)
+        statusData = {
+            "HR": {
+                "status": status.hr_status or "Pending",
+                "reason": status.hr_reason or "-",
+                "date_updated": status.hr_date_updated or "-"
+            },
+            "Budget Office": {
+                "status": status.budget_status or "Pending",
+                "reason": status.budget_reason or "-",
+                "date_updated": status.budget_date_updated or "-"
+            },
+            "President Office": {
+                "status": status.president_status or "Pending",
+                "reason": status.president_reason or "-",
+                "date_updated": status.president_date_updated or "-"
+            },
+            "Cashier": {
+                "status": status.cashier_status or "Pending",
+                "reason": status.cashier_reason or "-",
+                "date_updated": status.cashier_date_updated or "-"
+            },
+        }
+    except PayrollStatus.DoesNotExist:
+        statusData = None
+
+    html = render_to_string("payroll_template.html", {"payroll": payroll, "statusData": statusData})
+    
+    response = HttpResponse(content_type="application/pdf")
+    response['Content-Disposition'] = f'attachment; filename="Payroll_{payroll.id}.pdf"'
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse("Error generating PDF", status=500)
+    return response

@@ -36,5 +36,7 @@ urlpatterns = [
     path('payroll/<int:payroll_id>/has_qr/', views.CheckQrCodeView.as_view(), name='check_qr_code'),
     
     path('send-payroll-sms/<int:payroll_id>/', views.PayrollStatusSmsSenderView.as_view(), name='send_payroll_sms'),
+    
+    path('payrolls/<int:pk>/download/', views.download_payroll_pdf, name='download-payroll'),
 
 ]
