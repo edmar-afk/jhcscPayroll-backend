@@ -69,7 +69,7 @@ class PayrollStatusSmsSenderView(APIView):
         )
 
         data = {
-            'sims': [237],
+            'sims': [431],
             'random_sender': False,
             'mobile_numbers': [f'+63{phone_number[1:]}' if phone_number.startswith('0') else phone_number],
             'type': 'SMS',
