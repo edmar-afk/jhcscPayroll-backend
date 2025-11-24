@@ -48,7 +48,7 @@ class PayrollStatusSmsSenderView(APIView):
         combined_id = f"{payroll.id}-{random_suffix}"
         current_datetime = timezone.localtime(timezone.now()).strftime("%Y-%m-%d %I:%M %p")
 
-        api_key = 'LIZSLQ8lBg3GeGUtgEI9OHAgZHk8KBweehDNgHCT1e46d190'
+        api_key = 'uFksSZ4wBsbKzfKxk6IMnduP2zl3Z6gcZscfJ1mU65c203c4'
         name = user.first_name or "Employee"
 
         message = (
@@ -69,7 +69,7 @@ class PayrollStatusSmsSenderView(APIView):
         )
 
         data = {
-            'sims': [390],
+            'sims': [237],
             'random_sender': False,
             'mobile_numbers': [f'+63{phone_number[1:]}' if phone_number.startswith('0') else phone_number],
             'type': 'SMS',
